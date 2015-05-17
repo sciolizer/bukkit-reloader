@@ -1,3 +1,9 @@
-name: myBukkitPlugin
-main: name.ball.joshua.archetypes.bukkit.MyPlugin
+name: reloader
 version: 0.1
+author: joshbball@gmail.com
+website: https://github.com/sciolizer/bukkit-reloader
+main: name.ball.joshua.bukkit.reloader.Reloader
+
+commands:
+  reloader:
+    description: manage paths for hot reloading of plugins during plugin development
