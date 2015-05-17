@@ -1,0 +1,3 @@
+name: myBukkitPlugin
+main: name.ball.joshua.archetypes.bukkit.MyPlugin
+version: 0.1
