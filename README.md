@@ -1,5 +1,15 @@
-My bukkit plugin
-================
+Reloader plugin
+===============
+
+This is a tool for developing bukkit plugins faster. At the craft bukkit console, type:
+
+    /reloader watch /path/to/my/bukkit/plugin/target/classes
+
+When reloader sees any change in the contents of the given path, it creates a new jar file and instructs bukkit
+to load the new jar as a plugin.
+
+Installation
+============
 
 ```
 git clone https://github.com/Bukkit/Bukkit.git
@@ -14,4 +24,4 @@ mvn clean package
 cp target/*.jar ~/CraftBukkit/plugins
 ```
 
-Then start craft bukkit, and run `/reloader help`.
+Then start craft-bukkit, and run `/reloader`.
