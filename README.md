@@ -8,6 +8,9 @@ This is a tool for developing bukkit plugins faster. At the craft bukkit console
 When reloader sees any change in the contents of the given path, it creates a new jar file and instructs bukkit
 to load the new jar as a plugin.
 
+This is still very much a work in progress. It doesn't handle plugins that have commands very well, and it
+leaks memory.
+
 Installation
 ============
 
