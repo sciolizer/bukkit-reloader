@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+// doesn't work very well with the debugger?
 public class ReloadingTask implements Runnable {
 
     private final PluginTracker pluginTracker;
@@ -40,6 +41,10 @@ public class ReloadingTask implements Runnable {
                         if (originalJar != null) {
                             String originalPath = originalJar.getAbsolutePath();
                             if (loadedPlugins.containsKey(originalPath)) {
+                                // Might be able to work around the problem of commands not getting re-pointed by
+                                // hooking PlayerCommandPreprocessEvent
+//                                Bukkit.getPluginCommand("").
+//                                pluginManager.clearPlugins();
                                 pluginManager.disablePlugin(loadedPlugins.get(originalPath));
                                 loadedPlugins.remove(originalPath);
                             }
