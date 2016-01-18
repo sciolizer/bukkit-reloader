@@ -5,23 +5,34 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 public class Reloader extends JavaPlugin {
 
-    private PluginTracker pluginTracker = new PluginTracker();
+    private PluginTracker pluginTracker = new PluginTracker(this);
+    private BukkitTask bukkitTask;
 
     public void onDisable() {
-        for (String path : pluginTracker.getPaths()) {
-            pluginTracker.removePath(path);
-        }
-        // todo: this actually needs to perform the removal synchronously, not asynchronously
+        bukkitTask.cancel();
     }
 
     public void onEnable() {
+        saveDefaultConfig();
+        FileConfiguration config = getConfig();
+        config.options().copyHeader(true);
+        saveConfig();
+
+        List<?> watchers = config.getList("watchers");
+        for (Object watcher : watchers) {
+            pluginTracker.addPath((String)watcher);
+        }
+
         getCommand("reloader").setExecutor(new CommandExecutor() {
             @Override
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -50,7 +61,7 @@ public class Reloader extends JavaPlugin {
                         return false;
                     }
                     String path = strings[1];
-                    pluginTracker.addPath(path);
+                    pluginTracker.addPathAndSaveConfig(path);
                     if (strings.length > 2) {
                         commandSender.sendMessage("Now watching path '" + path + "'.");
                     }
@@ -81,7 +92,7 @@ public class Reloader extends JavaPlugin {
             }
         });
 
-        Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new ReloadingTask(pluginTracker, this), 20l, 20l);
+        bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ReloadingTask(pluginTracker, this), 20l, 20l);
     }
 
 }
