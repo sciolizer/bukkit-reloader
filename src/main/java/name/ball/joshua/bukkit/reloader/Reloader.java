@@ -1,13 +1,11 @@
 package name.ball.joshua.bukkit.reloader;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.List;
@@ -16,10 +14,10 @@ import java.util.Set;
 public class Reloader extends JavaPlugin {
 
     private PluginTracker pluginTracker = new PluginTracker(this);
-    private BukkitTask bukkitTask;
+    private ReloadingTask reloadingTask;
 
     public void onDisable() {
-        bukkitTask.cancel();
+        reloadingTask.stop();
     }
 
     public void onEnable() {
@@ -92,7 +90,8 @@ public class Reloader extends JavaPlugin {
             }
         });
 
-        bukkitTask = Bukkit.getScheduler().runTaskTimerAsynchronously(this, new ReloadingTask(pluginTracker, this), 20l, 20l);
+        reloadingTask = new ReloadingTask(pluginTracker, this);
+        reloadingTask.start();
     }
 
 }
