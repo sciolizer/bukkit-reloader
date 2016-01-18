@@ -64,6 +64,7 @@ public class PluginTracker implements Callable<List<Watcher.JarReplacement>> {
                     watchers.remove(droppedPath);
                 }
             }
+            droppedPaths.clear();
         }
         return replacements;
     }
